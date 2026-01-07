@@ -1,27 +1,26 @@
 import classNames from 'classnames';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 type Props = {
+  titleInputRef: React.RefObject<HTMLInputElement>;
+  isUpdating: boolean;
   isToggleAllActive: boolean;
-  addNewTodo: (title: string) => void;
+  onSubmit: () => void;
 };
 
-export const Header: React.FC<Props> = ({ isToggleAllActive, addNewTodo }) => {
-  const input = useRef<HTMLInputElement>(null);
-
+export const Header: React.FC<Props> = ({
+  isToggleAllActive,
+  onSubmit = () => {},
+  isUpdating,
+  titleInputRef,
+}) => {
   useEffect(() => {
-    input.current?.focus();
-  }, []);
+    titleInputRef?.current?.focus();
+  }, [titleInputRef, isUpdating]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const title = (
-      e.currentTarget.elements[0] as HTMLInputElement
-    ).value.trim();
-
-    input.current!.disabled = true;
-
-    addNewTodo(title);
+  const handleSubmit = (formEvent: React.FormEvent<HTMLFormElement>) => {
+    formEvent.preventDefault();
+    onSubmit();
   };
 
   return (
@@ -40,7 +39,8 @@ export const Header: React.FC<Props> = ({ isToggleAllActive, addNewTodo }) => {
           type="text"
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
-          ref={input}
+          ref={titleInputRef}
+          disabled={isUpdating}
         />
       </form>
     </header>

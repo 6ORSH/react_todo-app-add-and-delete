@@ -9,11 +9,9 @@ export const getTodos = () => {
 };
 
 export const addTodo = (todo: NewTodo) => {
-  return client.post<Todo>(`/todos?userId=${USER_ID}`, todo);
+  return client.post<Todo>(`/todos`, todo);
 };
 
 export const deleteTodo = (id: number) => {
-  return client.delete(`/todos/${id}?userId=${USER_ID}`);
+  return client.delete(`/todos/${id}`);
 };
-
-// Add more methods here
